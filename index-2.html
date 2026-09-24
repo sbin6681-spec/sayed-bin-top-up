@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#07111f">
+<title>SAYED BIN TOP UP</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#07111f;color:#f7f9ff}
+header{position:sticky;top:0;z-index:10;background:#0b1728ee;backdrop-filter:blur(12px);border-bottom:1px solid #20304b}
+.nav{max-width:1050px;margin:auto;padding:14px 18px;display:flex;align-items:center;justify-content:space-between}
+.brand{font-weight:900;font-size:20px;color:#63e6be}.badge{font-size:12px;color:#9fb0cc}
+.hero{max-width:1050px;margin:auto;padding:52px 18px 28px;text-align:center}
+.hero h1{font-size:42px;margin:0 0 10px}.hero p{color:#a9b7ce;margin:0}
+.wrap{max-width:1050px;margin:auto;padding:0 18px 45px;display:grid;grid-template-columns:1.2fr .8fr;gap:18px}
+.card{background:#0d1a2d;border:1px solid #203653;border-radius:20px;padding:22px;box-shadow:0 18px 45px #0004}
+h2{margin-top:0}.muted{color:#9fb0cc;font-size:13px}
+label{display:block;margin:16px 0 7px;font-weight:700}
+input,select{width:100%;padding:14px;border:1px solid #2a4162;border-radius:12px;background:#081424;color:white;font-size:15px;outline:none}
+input:focus,select:focus{border-color:#63e6be}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.pkg{padding:14px;border:1px solid #29405f;border-radius:14px;background:#0a1627;cursor:pointer}
+.pkg.active{border-color:#63e6be;background:#102c30}.pkg b{display:block;font-size:18px}.pkg span{color:#63e6be;font-weight:800}
+button{width:100%;border:0;border-radius:12px;padding:15px;background:#63e6be;color:#06151a;font-size:16px;font-weight:900;cursor:pointer;margin-top:16px}
+button.secondary{background:#172942;color:#dce5f7}
+.result{display:none;margin-top:15px;padding:14px;border-radius:12px;background:#09251f;border:1px solid #286a5c;line-height:1.7}
+.steps{display:grid;gap:10px}.step{padding:14px;border-radius:14px;background:#0a1627;border:1px solid #203653}
+.num{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:50%;background:#63e6be;color:#06151a;font-weight:900;margin-right:8px}
+footer{text-align:center;color:#71829d;padding:24px;border-top:1px solid #182a43;font-size:12px}
+@media(max-width:750px){.wrap{grid-template-columns:1fr}.hero h1{font-size:34px}}
+</style>
+</head>
+<body>
+<header><div class="nav"><div class="brand">SAYED BIN TOP UP</div><div class="badge">DEMO STORE</div></div></header>
+<section class="hero"><h1>🎮 Game Top Up</h1><p>দ্রুত ও সহজে আপনার Free Fire UID-এর জন্য package নির্বাচন করুন</p></section>
+
+<main class="wrap">
+<section class="card">
+<h2>💎 Free Fire Diamonds</h2>
+<div class="muted">Player UID দিন এবং একটি package বেছে নিন।</div>
+
+<label>Player UID</label>
+<input id="uid" type="text" inputmode="numeric" placeholder="যেমন: 123456789">
+
+<label>Diamond Package</label>
+<div class="grid" id="packages">
+<div class="pkg active" data-d="25" data-p="20"><b>💎 25</b><span>৳20</span></div>
+<div class="pkg" data-d="100" data-p="80"><b>💎 100</b><span>৳80</span></div>
+<div class="pkg" data-d="210" data-p="160"><b>💎 210</b><span>৳160</span></div>
+<div class="pkg" data-d="530" data-p="380"><b>💎 530</b><span>৳380</span></div>
+<div class="pkg" data-d="1080" data-p="760"><b>💎 1080</b><span>৳760</span></div>
+<div class="pkg" data-d="2200" data-p="1500"><b>💎 2200</b><span>৳1500</span></div>
+</div>
+
+<label>Payment Method</label>
+<select id="payment"><option>bKash</option><option>Nagad</option><option>Rocket</option></select>
+<button onclick="order()">Order Now 🚀</button>
+<div id="result" class="result"></div>
+<p class="muted">এটি demo। Real payment/automatic delivery এখনো চালু নেই।</p>
+</section>
+
+<aside class="card">
+<h2>📋 কীভাবে কাজ করবে</h2>
+<div class="steps">
+<div class="step"><span class="num">1</span>Player UID দিন</div>
+<div class="step"><span class="num">2</span>Diamond package নির্বাচন করুন</div>
+<div class="step"><span class="num">3</span>Payment method নির্বাচন করুন</div>
+<div class="step"><span class="num">4</span>Order ID তৈরি হবে</div>
+</div>
+<hr style="border:0;border-top:1px solid #203653;margin:22px 0">
+<h3>🔎 Order Status</h3>
+<input id="oid" placeholder="Order ID">
+<button class="secondary" onclick="status()">Check Status</button>
+<div id="stat" class="result"></div>
+</aside>
+</main>
+<footer>© 2026 SAYED BIN TOP UP • Demo Version</footer>
+
+<script>
+let chosen={d:25,p:20};
+document.querySelectorAll('.pkg').forEach(x=>x.onclick=()=>{
+ document.querySelectorAll('.pkg').forEach(y=>y.classList.remove('active'));
+ x.classList.add('active');chosen={d:x.dataset.d,p:x.dataset.p};
+});
+function order(){
+ const uid=document.getElementById('uid').value.trim(), r=document.getElementById('result');
+ if(!uid){r.style.display='block';r.innerHTML='⚠️ Player UID দিন।';return}
+ const id='SB'+Math.floor(100000+Math.random()*900000);
+ r.style.display='block';
+ r.innerHTML=`✅ <b>Order Created</b><br>Order ID: <b>${id}</b><br>UID: ${uid}<br>Package: 💎 ${chosen.d}<br>Price: ৳${chosen.p}<br>Payment: ${document.getElementById('payment').value}<br>Status: Pending (Demo)`;
+ document.getElementById('oid').value=id;
+}
+function status(){
+ const id=document.getElementById('oid').value.trim(),s=document.getElementById('stat');
+ s.style.display='block';s.innerHTML=id?`🔎 Order <b>${id}</b><br>Status: Pending (Demo)`:'⚠️ Order ID দিন।';
+}
+</script>
+</body>
+</html>
